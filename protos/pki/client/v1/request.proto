@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package linuxuser586.pki.client.v1;
+option go_package = "github.com/linuxuser586/apis/grpc/pki/client/v1";
+
+// ClientService is for requsting key/cert pair for use in TLS
+service ClientService {
+    // NewCert requests a new TLS certificate
+    rpc NewCert(CertRequest) returns (CertResponse) {
+    }
+}
+
+// CertRequest holds the data to ruturn from the ClientService
+message CertRequest {
+    // subjects holds any number of ip and host
+    repeated string subjects = 1;
+    // password is optional and only used when requesting 
+    // a eystore and truststore for Java in PKCS#12 format
+    string password = 2;
+}
+
+// CertResponse contains data with the key/cert pair
+message CertResponse {
+    // key is the private key or keystore in PKCS#12 format
+    // if a password was supplied in the request
+    string key = 1;
+    // key is the public certificate or truststore in PKCS#12
+    // format if a password was supplied in the request
+    string cert = 2;
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package linuxuser586.cassandra.snapshot.v1;
+option go_package = "github.com/linuxuser586/apis/grpc/cassandra/snapshot/v1";
+
+import "protos/cassandra/nodetool/v1/nodetool.proto";
+
+service Snapshotter {
+    rpc Snapshot(Request) returns (Response) {
+    }
+}
+
+message Request {
+    linuxuser586.cassandra.nodetool.v1.Args args = 1;
+    string table = 2;
+    string kt_list = 3;
+    bool skip_flush = 4;
+    string tag = 5;
+    string keyspaces = 6;
+}
+
+message Response {
+    int32 code = 1;
+    string message = 2;
+}

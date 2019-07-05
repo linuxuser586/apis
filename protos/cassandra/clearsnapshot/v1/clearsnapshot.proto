@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package linuxuser586.cassandra.clearnsnapshot.v1;
+option go_package = "github.com/linuxuser586/apis/grpc/cassandra/clearsnapshot/v1";
+
+import "protos/cassandra/nodetool/v1/nodetool.proto";
+
+service ClearSnapshotService {
+    rpc Run(Request) returns (Response) {
+    }
+}
+
+message Request {
+    linuxuser586.cassandra.nodetool.v1.Args args = 1;
+    string snapshot_name = 2;
+    string keyspaces = 3;
+}
+
+message Response {
+    string message = 1;
+}

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package linuxuser586.pki.ca.v1;
+option go_package = "github.com/linuxuser586/apis/grpc/pki/ca/v1";
+
+// CertService is for retrieving the CA certificate
+service CertService {
+    // Get the CA certificate
+    rpc Get(CertRequest) returns (CertResponse) {
+    }
+}
+
+// CertRequest is currently empty
+message CertRequest {
+    
+}
+
+// CertResponse is the CertService response
+message CertResponse {
+    string cert = 1;
+}

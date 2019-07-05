@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package linuxuser586.cassandra.backup.v1;
+option go_package = "github.com/linuxuser586/apis/grpc/cassandra/backup/v1";
+
+service BackupService {
+  rpc StreamFrom(Downstream) returns (stream Upstream) {}
+
+  rpc StreamTo(stream Restore) returns (stream RestoreResponse) {}
+
+  rpc DeleteCommitLog(stream DeleteRequest) returns (stream DeleteResponse) {}
+
+  rpc DeleteIncremental(stream DeleteRequest) returns (stream DeleteResponse) {}
+}
+
+message Downstream {
+  enum Type {
+    COMMITLOG = 0;
+    INCREMENTAL = 1;
+    SNAPSHOT = 2;
+  }
+
+  enum ChunkSize {
+    FOUR_K = 0;
+    ONE_K = 1;
+    TWO_K = 3;
+    EIGHT_K = 4;
+  }
+
+  enum HashType { CRC32C = 0; }
+
+  message Resume {
+    string file_name = 1;
+    int64 position = 2;
+    string path = 3;
+  }
+
+  Type type = 1;
+  ChunkSize chunk_size = 2;
+  HashType hash_type = 3;
+  Resume resume = 4;
+}
+
+message Upstream {
+  message Meta {
+    string file_name = 1;
+    int64 file_size = 2;
+    string hash = 3;
+    string path = 4;
+  }
+
+  message Chunk {
+    int64 position = 1;
+    bytes data = 2;
+    bool eof = 3;
+  }
+
+  oneof payload {
+    Meta meta = 1;
+    Chunk chunk = 2;
+  }
+}
+
+message Restore {
+  oneof payload {
+    Downstream downstream = 1;
+    Upstream upstream = 2;
+  }
+}
+
+message RestoreResponse {
+  bool fail = 1;
+  string message = 2;
+}
+
+message DeleteRequest { string file = 1; }
+
+message DeleteResponse {
+  bool fail = 1;
+  string message = 2;
+}

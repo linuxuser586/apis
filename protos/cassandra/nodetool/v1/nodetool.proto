@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package linuxuser586.cassandra.nodetool.v1;
+option go_package = "github.com/linuxuser586/apis/grpc/cassandra/nodetool/v1";
+
+message Args {
+  string host = 1;
+  string port = 2;
+  string username = 3;
+  string password = 4;
+  string password_file = 5;
+}
